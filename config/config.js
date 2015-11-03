@@ -27,7 +27,7 @@ var config = {
       name: 'avatract'
     },
     port: 3000,
-    db: 'mongodb://localhost/avatract-production'
+    db: process.env.MONGOLAB_URI
   }
 };
 
