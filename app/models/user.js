@@ -6,8 +6,9 @@ var mongoose = require('mongoose'),
 var UserSchema = new Schema({
   userId: String,
   email: String,
-  availability: String,
-  status: String
+  availability: Date,
+  status: String,
+  source: String
 });
 
 UserSchema.virtual('date')
