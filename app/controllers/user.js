@@ -1,8 +1,10 @@
 var express = require('express'),
   router = express.Router(),
+  tokenService = require('./../filter/token'),
   mongoose = require('mongoose'),
   User = mongoose.model('User');
 
+router.use(tokenService.ensureAuthorized);
 module.exports = function (app) {
   app.use('/api/users', router);
 };
