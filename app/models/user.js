@@ -18,3 +18,10 @@ UserSchema.virtual('date')
 
 mongoose.model('User', UserSchema);
 
+var AgencySchema = new Schema({
+  agencyId: Number,
+  name: String,
+  token: String
+});
+
+mongoose.model('Agency', AgencySchema);
