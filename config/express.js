@@ -12,7 +12,7 @@ module.exports = function(app, config) {
   var env = process.env.NODE_ENV || 'development';
   app.locals.ENV = env;
   app.locals.ENV_DEVELOPMENT = env == 'development';
-  
+
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'jade');
 
@@ -27,6 +27,16 @@ module.exports = function(app, config) {
   app.use(express.static(config.root + '/public'));
   app.use(methodOverride());
 
+  /* At the top, with other redirect methods before other routes */
+  app.get('*',function(req,res,next){
+    if(req.headers['x-forwarded-proto']!=='https') {
+      res.status(403).send('use https');
+      //res.redirect('https://mypreferreddomain.com'+req.url);
+    } else {
+      next(); /* Continue to other routes if we're not redirecting */
+    }
+  });
+
   var controllers = glob.sync(config.root + '/app/controllers/*.js');
   controllers.forEach(function (controller) {
     require(controller)(app);
@@ -37,7 +47,7 @@ module.exports = function(app, config) {
     err.status = 404;
     next(err);
   });
-  
+
   if(app.get('env') === 'development'){
     app.use(function (err, req, res, next) {
       res.status(err.status || 500);
